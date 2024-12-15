@@ -68,3 +68,8 @@ enabled = true
 binding = "QUIZ_KV"
 id = "bd913cab64654a51801b3be7355edb0e"
 preview_id = "95abd98f8a114d7d86d714c92f75b6f8"
+
+[[d1_databases]]
+binding = "DB" # available in your Worker on env.DB
+database_name = "quiz-kanji"
+database_id = "920e869b-8e9f-4604-80cc-c57b30bb3817"
