@@ -1,10 +1,13 @@
 import { Hono } from "hono";
-import { basicAuth } from "hono/basic-auth";
+import { cors } from 'hono/cors'
+// import { basicAuth } from "hono/basic-auth";
 import { Bindings } from "./bindings";
 import kanjiRoute from "./kanji";
 
 const app = new Hono<{ Bindings: Bindings }>();
+app.use('/api/*', cors())
 
+// todo: add request refer check
 // app.use(
 //   "/api/*",
 //   basicAuth({

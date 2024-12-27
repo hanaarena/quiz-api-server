@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "cf-deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "start": "wrangler dev",
     "test": "vitest",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "cf-deploy": "wrangler deploy"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.5.2",
