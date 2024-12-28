@@ -54,17 +54,28 @@ app.post("/fav/update", async (c) => {
     where,
   });
 
-  if (fav?.id) {
-    // when record exist
-    prisma.kanji_fav.delete({
-      where,
-    });
-    return c.json({ result: fav });
-  } else {
-    const result = prisma.kanji_fav.create({
-      data,
-    });
-    return c.json({ result });
+  try {
+    if (fav?.id) {
+      // when record exist
+      await prisma.kanji_fav.delete({
+        where,
+      });
+      return c.json({ result: fav });
+    } else {
+      const result = await prisma.kanji_fav.create({
+        data,
+      });
+      return c.json({ result });
+    }
+  } catch (error) {
+    let err = error;
+    let stack = '';
+    if (error instanceof Error) {
+      err = error.message
+      stack = error.stack || ''
+    }
+
+    return c.json({ message: err, stack }, 500);
   }
 });
 

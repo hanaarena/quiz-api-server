@@ -24,6 +24,14 @@ a quiz server used Cloudflare workers D1
 
 - https://dash.cloudflare.com/302b93166fe16ad2af4e382b46879cb9/workers/services/view/jlpt-easy-server/production
 
+`查询数据`
+
+```bash
+npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
+```
+
+更多命令: https://developers.cloudflare.com/workers/wrangler/commands/#d1-execute
+
 ## Usage
 
 ```bash
