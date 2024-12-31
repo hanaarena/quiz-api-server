@@ -62,3 +62,5 @@ src/kanji/index.ts
 
 - GET /api/kanji/fav/check/:kanji - check whether a kanji is a favorite kanji
 - POST /api/kanji/fav/update - update a kanji's favorite status
+- POST /api/kanji/fav/list - check multiple kanji's favorite status
+- POST /api/kanji/fav/page - get pagination kanji list

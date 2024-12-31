@@ -1,9 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaD1 } from "@prisma/adapter-d1";
 import { Hono } from "hono";
+import { validator } from 'hono/validator'
+
 import { Bindings } from "../bindings";
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+type TKanjiType = "n2" | "n1";
 
 app.get("/fav/check/:kanji", async (c) => {
   const kanji = c.req.param("kanji");
@@ -18,8 +22,8 @@ app.get("/fav/check/:kanji", async (c) => {
 });
 
 app.post("/fav/list", async (c) => {
-  const body = await c.req.json<{ list: string[] }>();
-  const { list } = body;
+  const body = await c.req.json<{ list: string[], type: TKanjiType }>();
+  const { list, type } = body;
   const adapter = new PrismaD1(c.env.DB);
   const prisma = new PrismaClient({ adapter });
   const result = await prisma.kanji_fav.findMany({
@@ -27,6 +31,7 @@ app.post("/fav/list", async (c) => {
       kanji: {
         in: list,
       },
+      type
     },
   });
   return c.json({ result });
@@ -69,14 +74,42 @@ app.post("/fav/update", async (c) => {
     }
   } catch (error) {
     let err = error;
-    let stack = '';
+    let stack = "";
     if (error instanceof Error) {
-      err = error.message
-      stack = error.stack || ''
+      err = error.message;
+      stack = error.stack || "";
     }
 
     return c.json({ message: err, stack }, 500);
   }
+});
+
+app.post("/fav/page", validator('json', async (value, c) => {
+  if (value.pn < 1) {
+    return c.json({ message: "pn must be greater than 0" }, 400);
+  } else if (value.ps < 1 || value.ps > 50) {
+    return c.json({ message: "invalid ps" }, 400);
+  }
+  return value;
+}), async (c) => {
+  const body = await c.req.json<{
+    pn: number;
+    ps: number;
+
+  }>();
+  const { pn, ps } = body;
+  const adapter = new PrismaD1(c.env.DB);
+  const prisma = new PrismaClient({ adapter });
+  const total = await prisma.kanji_fav.count();
+  const list = await prisma.kanji_fav.findMany({
+    skip: (pn - 1) * ps,
+    take: ps,
+  });
+  const result = {
+    total,
+    list,
+  };
+  return c.json({ result });
 });
 
 export default app;
