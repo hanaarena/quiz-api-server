@@ -30,6 +30,8 @@ a quiz server used Cloudflare workers D1
 npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
 ```
 
+**NOTE**: 查询prod数据时，把`--local`参数换成`--remote`
+
 更多命令: https://developers.cloudflare.com/workers/wrangler/commands/#d1-execute
 
 ## Usage
@@ -60,3 +62,5 @@ src/kanji/index.ts
 
 - GET /api/kanji/fav/check/:kanji - check whether a kanji is a favorite kanji
 - POST /api/kanji/fav/update - update a kanji's favorite status
+- POST /api/kanji/fav/list - check multiple kanji's favorite status
+- POST /api/kanji/fav/page - get pagination kanji list

@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import { cors } from 'hono/cors'
+import { HTTPException } from 'hono/http-exception'
+
 // import { basicAuth } from "hono/basic-auth";
 import { Bindings } from "./bindings";
 import kanjiRoute from "./kanji";
@@ -24,6 +26,18 @@ app.get("/kv/test", async (c) => {
   console.log(v);
 
   return c.text("Hello World!");
+});
+
+
+app.onError((error, c) => {
+  if (error instanceof HTTPException) {
+    return error.getResponse()
+  }
+
+  if (error instanceof Error) {
+    return c.json({ message: error.message, stack: error.stack }, 500);
+  }
+  return c.json({ message: "Internal Server Error" }, 500);
 });
 
 export default app;
