@@ -60,6 +60,9 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
 
     4.2. sync local db: `npx wrangler d1 migrations apply quiz-kanji --remote`
 
+5. 生成Prisma SQL类型定义
+    5.1. `npx prisma generate`
+
 ## Usage
 
 ```bash
@@ -90,3 +93,11 @@ src/kanji/index.ts
 - POST /api/kanji/fav/update - update a kanji's favorite status
 - POST /api/kanji/fav/list - check multiple kanji's favorite status
 - POST /api/kanji/fav/page - get pagination kanji list
+
+### /api/grammar
+
+src/grammar/index.ts
+
+- GET /api/grammar/fav/check/:grammar
+- POST /api/grammar/fav/update - update a grammar's favorite status
+- POST /api/grammar/fav/page - get pagination grammar list
