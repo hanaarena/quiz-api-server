@@ -19,3 +19,14 @@ model Kanji_fav {
   createdAt DateTime   @default(now())
   updatedAt DateTime
 }
+
+model grammar_fav {
+  id        Int        @id @default(autoincrement())
+  level     String     @default("n2")
+  // grammar key
+  key       String
+  meaning   String
+  // example with original & translation sentence
+  example   String
+  createdAt DateTime   @default(now())
+}
