@@ -103,4 +103,20 @@ app.post(
   }
 );
 
+app.post("/fav/list", async (c) => {
+  const body = await c.req.json<{ list: string[], level: TGrammarType }>();
+  const { list, level } = body;
+  const adapter = new PrismaD1(c.env.DB);
+  const prisma = new PrismaClient({ adapter });
+  const result = await prisma.grammar_fav.findMany({
+    where: {
+      key: {
+        in: list,
+      },
+      level
+    },
+  });
+  return c.json({ result });
+});
+
 export default app;
