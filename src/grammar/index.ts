@@ -42,7 +42,7 @@ app.post("/fav/update", async (c) => {
     level
   };
 
-  const fav = await prisma.kanji_fav.findFirst({
+  const fav = await prisma.grammar_fav.findFirst({
     where
   });
 
