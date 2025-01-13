@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaD1 } from "@prisma/adapter-d1";
 import { Hono } from "hono";
-import { validator } from 'hono/validator'
+import { validator } from "hono/validator";
 
 import { Bindings } from "../bindings";
 
@@ -48,12 +48,12 @@ app.post("/fav/update", async (c) => {
 
   try {
     if (fav?.id) {
-      await prisma.grammar_fav.delete({
+      const result = await prisma.grammar_fav.delete({
         where: {
           id: fav.id
         }
       });
-      return c.json({ result: fav });
+      return c.json({ result });
     } else {
       const result = await prisma.grammar_fav.create({
         data
@@ -104,17 +104,17 @@ app.post(
 );
 
 app.post("/fav/list", async (c) => {
-  const body = await c.req.json<{ list: string[], level: TGrammarType }>();
+  const body = await c.req.json<{ list: string[]; level: TGrammarType }>();
   const { list, level } = body;
   const adapter = new PrismaD1(c.env.DB);
   const prisma = new PrismaClient({ adapter });
   const result = await prisma.grammar_fav.findMany({
     where: {
       key: {
-        in: list,
+        in: list
       },
       level
-    },
+    }
   });
   return c.json({ result });
 });
