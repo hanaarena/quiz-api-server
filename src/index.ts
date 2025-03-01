@@ -6,6 +6,7 @@ import { HTTPException } from 'hono/http-exception'
 import { Bindings } from "./bindings";
 import kanjiRoute from "./kanji";
 import grammarRoute from "./grammar";
+import userRoute from "./user";
 
 const app = new Hono<{ Bindings: Bindings }>();
 app.use('/api/*', cors())
@@ -21,6 +22,7 @@ app.use('/api/*', cors())
 
 app.route("/api/kanji", kanjiRoute);
 app.route("/api/grammar", grammarRoute);
+app.route("/api/user", userRoute);
 
 app.get("/kv/test", async (c) => {
   // testing kv

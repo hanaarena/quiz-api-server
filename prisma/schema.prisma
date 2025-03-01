@@ -30,3 +30,13 @@ model grammar_fav {
   example   String
   createdAt DateTime   @default(now())
 }
+
+model user {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  opt       String     @unique
+  status    String     @default("verified")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime
+}
