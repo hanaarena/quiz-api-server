@@ -40,3 +40,11 @@ model user {
   createdAt DateTime   @default(now())
   updatedAt DateTime
 }
+
+model opt {
+  id        Int        @id @default(autoincrement())
+  code      String     @unique
+  createdAt DateTime   @default(now())
+  expiredAt DateTime
+  used      Boolean    @default(false)
+}

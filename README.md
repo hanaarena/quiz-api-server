@@ -48,7 +48,16 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
 
 3. 调用Prisma Migrate生成SQL。将SQL写入上步生成的文件中，注意需跟本地文件名对应上。
 
-    3.1. `npx prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output migrations/xxxx_modify_kanji_fav_type.sql`。注意如果是本项目第一次执行时，这里用**--from-empty**
+    3.1. 添加新表`npx prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output migrations/xxxx_modify_kanji_fav_type.sql`。注意由于是`from-empty` 所以会全量生成表，目前需要手动移除重复的部分。
+
+      3.1.1 理想的结果应该只生成新增表结构：
+      ```bash
+      npx prisma migrate diff \
+        --from-schema-datasource prisma/schema.prisma \
+        --to-schema-datamodel prisma/schema.prisma \
+        --script --output migrations/xxxx_modify_kanji_fav_type.sql
+      ```
+      但目前执行会报错找不到`dev.db`文件。猜测跟本地 D1 维护自己的sqlite有关系。
 
     3.2. 如果是修改表操作时（非首次migrate）：`npx prisma migrate diff --from-local-d1 --to-schema-datamodel ./prisma/schema.prisma --script --output migrations/xxxx_modify_kanji_fav_type.sql`。即用**--from-local-d1**
 
@@ -89,7 +98,7 @@ pnpm run cf-deploy
 
 ### /api/kanji
 
-src/kanji/index.ts
+`src/kanji/index.ts`
 
 - GET /api/kanji/fav/check/:kanji - check whether a kanji is a favorite kanji
 - POST /api/kanji/fav/update - update a kanji's favorite status
@@ -98,8 +107,25 @@ src/kanji/index.ts
 
 ### /api/grammar
 
-src/grammar/index.ts
+`src/grammar/index.ts`
 
 - GET /api/grammar/fav/check/:grammar
 - POST /api/grammar/fav/update - update a grammar's favorite status
 - POST /api/grammar/fav/page - get pagination grammar list
+
+### /api/user
+
+`src/user/index.ts`
+
+- POST /api/user/create
+- POST /api/user/update
+- POST /api/user/delete
+
+### /api/opt
+
+Used for generate once time invitation code.
+
+`src/opt/index.ts`
+
+- POST /api/opt/generate
+- POST /api/opt/used

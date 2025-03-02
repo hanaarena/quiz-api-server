@@ -7,6 +7,7 @@ import { Bindings } from "./bindings";
 import kanjiRoute from "./kanji";
 import grammarRoute from "./grammar";
 import userRoute from "./user";
+import optRoute from "./opt";
 
 const app = new Hono<{ Bindings: Bindings }>();
 app.use('/api/*', cors())
@@ -23,6 +24,7 @@ app.use('/api/*', cors())
 app.route("/api/kanji", kanjiRoute);
 app.route("/api/grammar", grammarRoute);
 app.route("/api/user", userRoute);
+app.route("/api/opt", optRoute);
 
 app.get("/kv/test", async (c) => {
   // testing kv
