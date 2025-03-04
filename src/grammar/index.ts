@@ -5,7 +5,7 @@ import { validator } from "hono/validator";
 
 import { Bindings } from "../bindings";
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: Bindings, Variables: Variables }>();
 
 type TGrammarType = "n5" | "n4" | "n3" | "n2" | "n1" | "n0";
 

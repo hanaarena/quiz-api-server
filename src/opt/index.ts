@@ -4,7 +4,7 @@ import { Hono } from "hono";
 
 import { Bindings } from "../bindings";
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: Bindings, Variables: Variables }>();
 
 function generateUniqueRandomString(length: number): string {
   const characters =
@@ -16,9 +16,7 @@ function generateUniqueRandomString(length: number): string {
 
   // Add random characters to reach the desired length
   for (let i = 0; i < length - timestamp.length; i++) {
-    result += characters.charAt(
-      Math.floor(Math.random() * characters.length)
-    );
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 
   return result;
@@ -32,26 +30,26 @@ app.post("/generate", async (c) => {
   await prisma.opt.create({
     data: {
       code: randomString,
-      expiredAt: new Date("2099-12-31").toISOString(),
+      expiredAt: new Date("2099-12-31").toISOString()
     }
-  })
+  });
 
-  return c.json({ code: randomString });
+  return c.json({ data: { code: randomString } });
 });
 
-app.post("/used", async c => {
+app.post("/used", async (c) => {
   const body = await c.req.json<{ code: string }>();
   const { code } = body;
   const adapter = new PrismaD1(c.env.DB);
   const prisma = new PrismaClient({ adapter });
   await prisma.opt.update({
     where: {
-      code,
+      code
     },
     data: {
       used: true
     }
-  })
-})
+  });
+});
 
 export default app;

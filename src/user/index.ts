@@ -5,7 +5,7 @@ import { validator } from "hono/validator";
 
 import { Bindings } from "../bindings";
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: Bindings, Variables: Variables }>();
 
 app.post("/create", validator('json', async (value, c) => {
   if (!value.email || !value.password || !value.opt) {

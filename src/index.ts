@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Hono, Context } from "hono";
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 
@@ -8,8 +8,12 @@ import kanjiRoute from "./kanji";
 import grammarRoute from "./grammar";
 import userRoute from "./user";
 import optRoute from "./opt";
+import { modifyBodyMiddleware } from "./middlewares/res";
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+// middlewares
+app.use('/api/*', modifyBodyMiddleware);
 app.use('/api/*', cors())
 
 // todo: add request refer check

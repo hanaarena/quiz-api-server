@@ -5,7 +5,7 @@ import { validator } from 'hono/validator'
 
 import { Bindings } from "../bindings";
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: Bindings, Variables: Variables }>();
 
 type TKanjiType = "n2" | "n1";
 
@@ -18,7 +18,8 @@ app.get("/fav/check/:kanji", async (c) => {
       kanji,
     },
   });
-  return c.json({ result: result || {} });
+
+  return c.newResponse(JSON.stringify(result));
 });
 
 app.post("/fav/list", async (c) => {
