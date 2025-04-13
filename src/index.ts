@@ -1,8 +1,7 @@
-import { Hono, Context } from "hono";
+import { Hono } from "hono";
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 
-// import { basicAuth } from "hono/basic-auth";
 import { Bindings } from "./bindings";
 import kanjiRoute from "./kanji";
 import grammarRoute from "./grammar";
@@ -16,22 +15,12 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use('/api/*', modifyBodyMiddleware);
 app.use('/api/*', cors())
 
-// todo: add request refer check
-// app.use(
-//   "/api/*",
-//   basicAuth({
-//     username: "keke",
-//     password: "you-dont-know",
-//   })
-// );
-
 app.route("/api/kanji", kanjiRoute);
 app.route("/api/grammar", grammarRoute);
 app.route("/api/user", userRoute);
 app.route("/api/opt", optRoute);
 
 app.get("/kv/test", async (c) => {
-  // testing kv
   const v = await c.env.QUIZ_KV.get("keke");
   console.log(v);
 
