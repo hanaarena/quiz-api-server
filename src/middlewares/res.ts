@@ -1,4 +1,4 @@
-import { Hono, Context, Next } from "hono";
+import { Context, Next } from "hono";
 import { StatusCode } from "hono/utils/http-status";
 
 interface CustomResponse extends Response {
@@ -10,15 +10,22 @@ const modifyBodyMiddleware = async (c: Context, next: Next) => {
   await next();
 
   if (c.res) {
+    if (c.res.status === 404) {
+      return;
+    }
+
     const originalBody = await c.res.json();
     const code = c.get("code") || c.res.status || 200;
-    const message = c.get("message") || "ok";
+    const message =
+      c.get("message") ||
+      (originalBody as unknown as { message: string }).message ||
+      "ok";
 
     c.res = c.newResponse(
       JSON.stringify({
         data: originalBody,
         message,
-        code,
+        code
       }),
       c.res.status as StatusCode,
       {
