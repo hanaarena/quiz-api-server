@@ -13,8 +13,8 @@ import { modifyBodyMiddleware } from "./middlewares/res";
 const app = new Hono<{ Bindings: Bindings }>();
 
 // middlewares
-app.use("/api/*", modifyBodyMiddleware);
 app.use("/api/*", cors());
+app.use("/api/*", modifyBodyMiddleware);
 
 app.route("/api/kanji", kanjiRoute);
 app.route("/api/grammar", grammarRoute);

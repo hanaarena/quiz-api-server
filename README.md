@@ -69,7 +69,7 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
     
     4.1. sync local db: `npx wrangler d1 migrations apply quiz-kanji --local`
 
-    4.2. sync local db: `npx wrangler d1 migrations apply quiz-kanji --remote`
+    4.2. sync remote (D1) db: `npx wrangler d1 migrations apply quiz-kanji --remote`
 
 5. 生成Prisma SQL类型定义
     5.1. `npx prisma generate`
