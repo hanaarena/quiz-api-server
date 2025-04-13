@@ -129,3 +129,11 @@ Used for generate once time invitation code.
 
 - POST /api/opt/generate
 - POST /api/opt/used
+
+### /api/quiz/gemini
+
+Used to generate quiz questions of a specified type.
+
+`src/quiz/gemini.ts`
+
+- POST /api/quiz/gemini/questions

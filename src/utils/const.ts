@@ -1,4 +1,12 @@
-export const QuizType = {
+export const GeminiModelList = {
+  Gemini2Flash: "gemini-2.0-flash",
+  Gemini2FlashExp: "gemini-2.0-flash-exp",
+  Gemini2FlashThinkExp: "gemini-2.0-flash-thinking-exp",
+  Gemini2ProExp: "gemini-2.0-pro-exp",
+  Gemini25ProExp: "gemini-2.5-pro-exp-03-25",
+}
+
+export const QuizType: Record<string, {name: string, value: Record<string, string>}> = {
   moji: {
     name: "文字·語彙",
     value: {
