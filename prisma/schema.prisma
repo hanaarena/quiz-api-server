@@ -48,3 +48,12 @@ model opt {
   expiredAt DateTime
   used      Boolean    @default(false)
 }
+
+model quiz_prompt {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  system    String     @default("")  // system message prompt
+  prompt    String     @default("")  // user prompt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime
+}

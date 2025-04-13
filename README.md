@@ -28,7 +28,7 @@ a quiz server used Cloudflare workers D1
 
 - https://www.prisma.io/docs/orm/reference/prisma-schema-reference#model-field-scalar-types
 
-`查询数据`
+## Execute sql locally
 
 ```bash
 npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
@@ -48,7 +48,7 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
 
 3. 调用Prisma Migrate生成SQL。将SQL写入上步生成的文件中，注意需跟本地文件名对应上。
 
-    3.1. 添加新表`npx prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output migrations/xxxx_modify_kanji_fav_type.sql`。注意由于是`from-empty` 所以会全量生成表，目前需要手动移除重复的部分。
+    3.1. 添加新表`npx prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output migrations/{generated_sql_file_from_previous_step.sql}`。注意由于是`from-empty` 所以会全量生成表，目前需要手动移除重复的部分。
 
       3.1.1 理想的结果应该只生成新增表结构：
       ```bash
@@ -69,7 +69,7 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
     
     4.1. sync local db: `npx wrangler d1 migrations apply quiz-kanji --local`
 
-    4.2. sync local db: `npx wrangler d1 migrations apply quiz-kanji --remote`
+    4.2. sync remote (D1) db: `npx wrangler d1 migrations apply quiz-kanji --remote`
 
 5. 生成Prisma SQL类型定义
     5.1. `npx prisma generate`
@@ -129,3 +129,11 @@ Used for generate once time invitation code.
 
 - POST /api/opt/generate
 - POST /api/opt/used
+
+### /api/quiz/gemini
+
+Used to generate quiz questions of a specified type.
+
+`src/quiz/gemini.ts`
+
+- POST /api/quiz/gemini/questions
