@@ -76,16 +76,37 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
 
 ## Usage
 
+### Local development
+
 ```bash
 pnpm run dev
 ```
 
+### Initiate database
 **⚠️NOTE⚠️**
 
 - 如果第一次运行本项目，请先运行:
 
 ```bash
 npx prisma generate
+```
+
+### Add your own Gemini API key
+
+For local development, add `.dev.vars` file in the root folder, the file content should be:
+
+```text
+GEMINI_API_KEY="Your_own_gemini_api_key_here"
+```
+
+Before deploy to production (Cloudflare Worker), add the key to the Worker's [Secret and Environment](https://developers.cloudflare.com/workers/configuration/secrets/):
+
+(Using terminal)
+
+```bash
+npx wrangler secret put GEMINI_API_KEY
+
+# enter you secret
 ```
 
 ## Deploy

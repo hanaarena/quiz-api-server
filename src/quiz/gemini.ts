@@ -21,8 +21,8 @@ geminiRoute.post("/questions", async (c) => {
   }
 
   try {
-    const body = await c.req.json<{ content: string; name: string }>();
-    const { content, name } = body;
+    const body = await c.req.json<{ content: string; name: string; model: string }>();
+    const { content, name, model } = body;
     if (!content || !name) {
       throw new Error(errorMsg);
     }
@@ -37,11 +37,11 @@ geminiRoute.post("/questions", async (c) => {
     const systemPrompt = promptResult?.system;
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: GeminiModelList.Gemini2FlashExp
+    const models = genAI.getGenerativeModel({
+      model: model || GeminiModelList.Gemini2FlashExp
     });
 
-    const result = await model.generateContent({
+    const result = await models.generateContent({
       contents: [
         {
           role: "user",
