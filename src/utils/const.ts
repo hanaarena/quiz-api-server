@@ -18,12 +18,13 @@ export const QuizType: Record<string, {name: string, value: Record<string, strin
       moji_6: "用法",
     }
   },
-  bungo: {
+  grammar: {
     name: "文法",
     value: {
-      bongo_1: "文法形式の判断",
-      bongo_2: "文の組み立て",
-      bongo_3: "文章の文法",
+      grammar_0: "全く文法",
+      grammar_1: "文法形式の判断",
+      grammar_2: "文の組み立て",
+      grammar_3: "文章の文法",
     }
   },
   tokkai: {
