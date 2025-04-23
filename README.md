@@ -115,6 +115,14 @@ npx wrangler secret put GEMINI_API_KEY
 pnpm run cf-deploy
 ```
 
+### Use Docker
+
+```bash
+docker pull zlnaz/quiz-server:latest
+# Persist KV and D1 data
+docker run -d -p 8787:8787 -v quiz-server-data:/app/.wrangler/state zlnaz/quiz-server:latest
+```
+
 ## Route list
 
 ### /api/kanji
