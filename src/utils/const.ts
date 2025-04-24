@@ -1,5 +1,6 @@
 export const GeminiModelList = {
   Gemini2Flash: "gemini-2.0-flash",
+  Gemini25Flash: "gemini-2.5-flash-preview-04-17",
   Gemini2FlashExp: "gemini-2.0-flash-exp",
   Gemini2FlashThinkExp: "gemini-2.0-flash-thinking-exp",
   Gemini2ProExp: "gemini-2.0-pro-exp",
@@ -10,12 +11,12 @@ export const QuizType: Record<string, {name: string, value: Record<string, strin
   moji: {
     name: "文字·語彙",
     value: {
-      moji_1: "漢字読み",
-      moji_2: "表記",
-      moji_3: "語形成",
-      moji_4: "文脈規定",
-      moji_5: "言い換え類義", 
-      moji_6: "用法",
+      moji_1_quick: "漢字読み",
+      moji_2_quick: "表記",
+      moji_3_quick: "語形成",
+      moji_4_quick: "文脈規定",
+      moji_5_quick: "言い換え類義", 
+      moji_6_quick: "用法",
     }
   },
   grammar: {

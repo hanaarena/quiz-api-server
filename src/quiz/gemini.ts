@@ -38,7 +38,7 @@ geminiRoute.post("/questions", async (c) => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const models = genAI.getGenerativeModel({
-      model: model || GeminiModelList.Gemini2FlashExp
+      model: model || GeminiModelList.Gemini25Flash
     });
 
     const result = await models.generateContent({
