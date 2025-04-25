@@ -28,14 +28,14 @@ export const QuizType: Record<string, {name: string, value: Record<string, strin
       grammar_3: "文章の文法",
     }
   },
-  tokkai: {
+  dokkai: {
     name: "読解",
     value: {
-      tokkai_1: "内容理解(短文)",
-      tokkai_2: "内容理解(中文)",
-      tokkai_3: "総合理解",
-      tokkai_4: "主張理解(長文)",
-      tokkai_5: "情報検索",
+      dokkai_1: "内容理解(短文)",
+      dokkai_2: "内容理解(中文)",
+      dokkai_3: "総合理解",
+      dokkai_4: "主張理解(長文)",
+      dokkai_5: "情報検索",
     }
   }
 }
