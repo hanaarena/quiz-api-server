@@ -34,8 +34,8 @@ geminiRoute.post("/questions", async (c) => {
     if (!content || !name) {
       throw new Error(errorMsg);
     }
-    const t = QuizType[name.split("_")[0]];
-    const quizName = `${t.name}.${t.value[name]}`;
+    const t = QuizType[name.split("_")[0]] || {};
+    const quizName = t.value ? `${t.name}.${t.value[name]}` : name;
 
     if (cache) {
       // detect `moji` question's cache
@@ -129,6 +129,9 @@ geminiRoute.post("/questions", async (c) => {
     }
     return c.json({ message: error.message }, 500);
   }
+});
+geminiRoute.post("/test", async (c) => {
+  return c.json({ message: "Hello" });
 });
 
 export default geminiRoute;
