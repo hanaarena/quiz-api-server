@@ -178,3 +178,4 @@ Used to generate quiz questions of a specified type.
 `src/quiz/gemini.ts`
 
 - POST /api/quiz/gemini/questions
+- GET /api/quiz/gemini/questions

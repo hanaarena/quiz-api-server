@@ -1,4 +1,5 @@
 import { Bindings } from "../bindings";
+import { GeminiModelList } from "../utils/const";
 import { generateRandomHash } from "../utils/string";
 
 const JOB_TYPE = "moji_3";
@@ -10,7 +11,8 @@ export async function getMoji3(env: Bindings) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       content: "hoolala",
-      name: JOB_TYPE
+      name: JOB_TYPE,
+      model: GeminiModelList.Gemini25Flash0520
     })
   }).then(async (r) => {
     const res = (await r.json()) as {
