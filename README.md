@@ -30,7 +30,7 @@ a quiz server used Cloudflare workers D1
 
 `Cloudflare workers KV API docs`
 
-- https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/subresources/keys/methods/list
+- https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/subresources/keys/methods/list/
 
 ## Execute sql locally
 

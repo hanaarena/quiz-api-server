@@ -10,6 +10,38 @@ const spliterKey = "[sperator]";
 
 const geminiRoute = new Hono<{ Bindings: Bindings }>();
 
+export async function getGemini(name: string, content: string, db: D1Database, apiKey: string, model: string) {
+  const adapter = new PrismaD1(db);
+  const prisma = new PrismaClient({ adapter });
+  const promptResult = await prisma.quiz_prompt.findFirst({
+    where: {
+      name
+    }
+  });
+  const systemPrompt = promptResult?.system;
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const models = genAI.getGenerativeModel({
+    model: model || GeminiModelList.Gemini25Flash
+  });
+
+  const result = await models.generateContent({
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text: content
+          }
+        ]
+      }
+    ],
+    systemInstruction: systemPrompt
+  });
+  const response = result.response;
+  return response.text();
+}
+
 geminiRoute.post("/questions", async (c) => {
   const apiKey = c.env.GEMINI_API_KEY;
   const db = c.env.DB;
@@ -65,35 +97,7 @@ geminiRoute.post("/questions", async (c) => {
       });
     }
 
-    const adapter = new PrismaD1(db);
-    const prisma = new PrismaClient({ adapter });
-    const promptResult = await prisma.quiz_prompt.findFirst({
-      where: {
-        name
-      }
-    });
-    const systemPrompt = promptResult?.system;
-
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const models = genAI.getGenerativeModel({
-      model: model || GeminiModelList.Gemini25Flash
-    });
-
-    const result = await models.generateContent({
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text: content
-            }
-          ]
-        }
-      ],
-      systemInstruction: systemPrompt
-    });
-    const response = result.response;
-    let text = response.text();
+    let text = await getGemini(name, content, db, apiKey, model)
 
     if (cache) {
       // caching `moji` question
