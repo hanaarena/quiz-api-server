@@ -9,6 +9,7 @@ import userRoute from "./user";
 import optRoute from "./opt";
 import quizRoute from "./quiz";
 import { modifyBodyMiddleware } from "./middlewares/res";
+import { getMoji3 } from "./cron";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -16,6 +17,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use("/api/*", cors());
 app.use("/api/*", modifyBodyMiddleware);
 
+// routes
 app.route("/api/kanji", kanjiRoute);
 app.route("/api/grammar", grammarRoute);
 app.route("/api/user", userRoute);
@@ -40,4 +42,9 @@ app.onError((error, c) => {
   return c.json({ message: "Internal Server Error" }, 500);
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  async scheduled(_: ScheduledEvent, env: Bindings, __: ExecutionContext) {
+    await getMoji3(env);
+  }
+};

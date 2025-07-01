@@ -2,7 +2,7 @@
 
 a quiz server used Cloudflare workers D1
 
-## 文档 & links
+## Documents & links
 
 `Cloudflare worker`
 
@@ -27,6 +27,10 @@ a quiz server used Cloudflare workers D1
 ⭐️`Prisma schema model field type`
 
 - https://www.prisma.io/docs/orm/reference/prisma-schema-reference#model-field-scalar-types
+
+`Cloudflare workers KV API docs`
+
+- https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/subresources/keys/methods/list
 
 ## Execute sql locally
 
@@ -73,6 +77,14 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
 
 5. 生成Prisma SQL类型定义
     5.1. `npx prisma generate`
+
+## Test Cron Triggers locally
+
+```bash
+curl "http://localhost:8787/cdn-cgi/handler/scheduled"
+```
+
+[Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally)
 
 ## Usage
 
@@ -166,3 +178,4 @@ Used to generate quiz questions of a specified type.
 `src/quiz/gemini.ts`
 
 - POST /api/quiz/gemini/questions
+- GET /api/quiz/gemini/questions

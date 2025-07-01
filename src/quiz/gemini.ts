@@ -130,8 +130,22 @@ geminiRoute.post("/questions", async (c) => {
     return c.json({ message: error.message }, 500);
   }
 });
-geminiRoute.post("/test", async (c) => {
-  return c.json({ message: "Hello" });
+
+geminiRoute.get("/questions", async (c) => {
+  const query = c.req.query();
+  const { name } = query;
+  if (!name) return c.json({ content: "" });
+
+  const cacheList = await c.env.QUIZ_KV.list({ prefix: name });
+  if (cacheList.keys.length) {
+    const firstItem = cacheList.keys[0];
+    const content = await c.env.QUIZ_KV.get(firstItem.name);
+    // FIFO
+    await c.env.QUIZ_KV.delete(firstItem.name);
+    return c.json({ content });
+  }
+
+  return c.json({ content: "" });
 });
 
 export default geminiRoute;
