@@ -86,4 +86,4 @@ database_name = "quiz-kanji"
 database_id = "920e869b-8e9f-4604-80cc-c57b30bb3817"
 
 [triggers]
-crons = ["*/10 * * * *"]
+crons = ["10 * * * *"]

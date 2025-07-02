@@ -137,19 +137,25 @@ geminiRoute.post("/questions", async (c) => {
 
 geminiRoute.get("/questions", async (c) => {
   const query = c.req.query();
-  const { name } = query;
+  const { name, len } = query;
   if (!name) return c.json({ content: "" });
 
+  // cacheList format: [ {"name":"moji_3_18d3H26Jf6","expiration":1751579469} ]
   const cacheList = await c.env.QUIZ_KV.list({ prefix: name });
   if (cacheList.keys.length) {
+    if (isNaN(Number(len))) {
+      // TODO: return specific number of items detect by len
+    }
+
+    // only return the first one item
     const firstItem = cacheList.keys[0];
-    const content = await c.env.QUIZ_KV.get(firstItem.name);
+    const generatedText = await c.env.QUIZ_KV.get(firstItem.name);
     // FIFO
     await c.env.QUIZ_KV.delete(firstItem.name);
-    return c.json({ content });
+    return c.json({ generatedText });
   }
 
-  return c.json({ content: "" });
+  return c.json({ generatedText: "" });
 });
 
 export default geminiRoute;
