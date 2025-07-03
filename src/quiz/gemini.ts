@@ -10,7 +10,13 @@ const spliterKey = "[sperator]";
 
 const geminiRoute = new Hono<{ Bindings: Bindings }>();
 
-export async function getGemini(name: string, content: string, db: D1Database, apiKey: string, model: string) {
+export async function getGemini(
+  name: string,
+  content: string,
+  db: D1Database,
+  apiKey: string,
+  model: string
+) {
   const adapter = new PrismaD1(db);
   const prisma = new PrismaClient({ adapter });
   const promptResult = await prisma.quiz_prompt.findFirst({
@@ -97,7 +103,7 @@ geminiRoute.post("/questions", async (c) => {
       });
     }
 
-    let text = await getGemini(name, content, db, apiKey, model)
+    let text = await getGemini(name, content, db, apiKey, model);
 
     if (cache) {
       // caching `moji` question
@@ -137,14 +143,35 @@ geminiRoute.post("/questions", async (c) => {
 
 geminiRoute.get("/questions", async (c) => {
   const query = c.req.query();
-  const { name, len } = query;
+  const { name, length } = query;
   if (!name) return c.json({ content: "" });
+  const len = isNaN(Number(length)) ? 1 : Number(length);
 
-  // cacheList format: [ {"name":"moji_3_18d3H26Jf6","expiration":1751579469} ]
-  const cacheList = await c.env.QUIZ_KV.list({ prefix: name });
+  // NOTE:
+  // - `cacheList` format: [ {"name":"moji_3_18d3H26Jf6","expiration":1751579469} ]
+  // - without `limit`, default return list length is 100 (max to 1000)
+  const cacheList = await c.env.QUIZ_KV.list({ prefix: name, limit: len });
   if (cacheList.keys.length) {
-    if (isNaN(Number(len))) {
-      // TODO: return specific number of items detect by len
+    if (len > 1) {
+      const list: string[] = [];
+      const keyList: string[] = [];
+      for (let index = 0; index < cacheList.keys.length; index++) {
+        const name = cacheList.keys[index].name;
+        keyList.push(name);
+      }
+
+      // get KV list by key list (limit to 100 keys and response size for 25MB with code 413)
+      const values: Map<string, string | null> = await c.env.QUIZ_KV.get(keyList);
+      // ensure the order of returned key's value
+      for (let index = 0; index < values.size; index++) {
+        const v = values.get(keyList[index])
+        if (v) {
+          list.push(v)
+        }
+      }
+      const generatedText = list.join("-AAA-").replaceAll(spliterKey, "").replace("-AAA-", spliterKey);
+
+      return c.json({ list, keyList, generatedText });
     }
 
     // only return the first one item
