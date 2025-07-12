@@ -151,6 +151,7 @@ geminiRoute.get("/questions", async (c) => {
   // - `cacheList` format: [ {"name":"moji_3_18d3H26Jf6","expiration":1751579469} ]
   // - without `limit`, default return list length is 100 (max to 1000)
   const cacheList = await c.env.QUIZ_KV.list({ prefix: name, limit: len });
+  console.log("cacheList", JSON.stringify(cacheList));
   if (cacheList.keys.length) {
     if (len > 1) {
       const list: string[] = [];
@@ -160,8 +161,12 @@ geminiRoute.get("/questions", async (c) => {
         keyList.push(name);
       }
 
-      // get KV list by key list (limit to 100 keys and response size for 25MB with code 413)
+      // get KV list by key list (limit to 100 keys and response size up for 25MB with cause code 413)
       const values: Map<string, string | null> = await c.env.QUIZ_KV.get(keyList);
+      for (const key of values.keys()) {
+        await c.env.QUIZ_KV.delete(key);
+      }
+
       // ensure the order of returned key's value
       for (let index = 0; index < values.size; index++) {
         const v = values.get(keyList[index])
@@ -169,7 +174,7 @@ geminiRoute.get("/questions", async (c) => {
           list.push(v)
         }
       }
-      const generatedText = list.join("-AAA-").replaceAll(spliterKey, "").replace("-AAA-", spliterKey);
+      const generatedText = list.join("-AAA-").replaceAll(spliterKey, "").replaceAll("-AAA-", spliterKey);
 
       return c.json({ list, keyList, generatedText });
     }
@@ -177,7 +182,7 @@ geminiRoute.get("/questions", async (c) => {
     // only return the first one item
     const firstItem = cacheList.keys[0];
     const generatedText = await c.env.QUIZ_KV.get(firstItem.name);
-    // FIFO
+    // FIFO, Note it take time to delete the key (~5-30s)
     await c.env.QUIZ_KV.delete(firstItem.name);
     return c.json({ generatedText });
   }
