@@ -28,7 +28,7 @@ export async function getGemini(
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const models = genAI.getGenerativeModel({
-    model: model || GeminiModelList.Gemini25Flash
+    model: model || GeminiModelList.Gemini25Flash0520
   });
 
   const result = await models.generateContent({

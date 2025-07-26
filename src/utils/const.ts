@@ -1,6 +1,5 @@
 export const GeminiModelList = {
   Gemini2Flash: "gemini-2.0-flash",
-  Gemini25Flash: "gemini-2.5-flash-preview-04-17",
   Gemini2FlashExp: "gemini-2.0-flash-exp",
   Gemini2FlashThinkExp: "gemini-2.0-flash-thinking-exp",
   Gemini2ProExp: "gemini-2.0-pro-exp",
