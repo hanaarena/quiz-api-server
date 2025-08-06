@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Bindings } from "../bindings";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { GeminiModelList, QuizType } from "../utils/const";
 import { PrismaD1 } from "@prisma/adapter-d1";
 import { PrismaClient } from "@prisma/client";
@@ -9,13 +9,13 @@ const errorMsg = "limited";
 const spliterKey = "[sperator]";
 
 const geminiRoute = new Hono<{ Bindings: Bindings }>();
-
 export async function getGemini(
   name: string,
   content: string,
   db: D1Database,
   apiKey: string,
-  model: string
+  model: string,
+  headers: Record<string, string> = {}
 ) {
   const adapter = new PrismaD1(db);
   const prisma = new PrismaClient({ adapter });
@@ -26,12 +26,9 @@ export async function getGemini(
   });
   const systemPrompt = promptResult?.system;
 
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const models = genAI.getGenerativeModel({
-    model: model || GeminiModelList.Gemini25Flash0520
-  });
-
-  const result = await models.generateContent({
+  const genAI = new GoogleGenAI({ apiKey });
+  const result = await genAI.models.generateContent({
+    model: model || GeminiModelList.Gemini25Flash0520,
     contents: [
       {
         role: "user",
@@ -42,10 +39,15 @@ export async function getGemini(
         ]
       }
     ],
-    systemInstruction: systemPrompt
+    config: {
+      systemInstruction: systemPrompt,
+      httpOptions: {
+        headers
+      }
+    }
   });
-  const response = result.response;
-  return response.text();
+  const response = result.text;
+  return response;
 }
 
 geminiRoute.post("/questions", async (c) => {
@@ -103,11 +105,16 @@ geminiRoute.post("/questions", async (c) => {
       });
     }
 
-    let text = await getGemini(name, content, db, apiKey, model);
+    // 获取 client headers
+    const clientHeaders: Record<string, string> = {};
+    for (const [key, value] of Object.entries(c.req.header())) {
+      if (typeof value === "string") clientHeaders[key] = value;
+    }
+    let text = await getGemini(name, content, db, apiKey, model, clientHeaders);
 
     if (cache) {
       // caching `moji` question
-      if (name.indexOf("moji_") > -1) {
+      if (name.indexOf("moji_") > -1 && text) {
         const resArr = text.split(spliterKey);
         const keywordArr = content.split(",");
         for (let index = 0; index < keywordArr.length; index++) {
