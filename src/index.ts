@@ -16,6 +16,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 // middlewares
 app.use("/api/*", cors());
+app.use("/proxy", cors());
 app.use("/api/*", modifyBodyMiddleware);
 
 // routes
