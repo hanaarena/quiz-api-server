@@ -10,6 +10,7 @@ import optRoute from "./opt";
 import quizRoute from "./quiz";
 import { modifyBodyMiddleware } from "./middlewares/res";
 import { getMoji3 } from "./cron";
+import proxyRoute from "./proxy";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -23,6 +24,7 @@ app.route("/api/grammar", grammarRoute);
 app.route("/api/user", userRoute);
 app.route("/api/opt", optRoute);
 app.route("/api/quiz", quizRoute);
+app.route("/proxy", proxyRoute)
 
 app.get("/kv/test", async (c) => {
   const v = await c.env.QUIZ_KV.get("keke");
