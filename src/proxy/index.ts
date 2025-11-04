@@ -13,7 +13,7 @@ app.get("/", async (c) => {
     }
 
     const headers = new Headers();
-    const rawHeaders = Object.fromEntries(c.req.raw.headers)
+    const rawHeaders = Object.fromEntries(c.req.raw.headers);
     for (const [key, value] of Object.entries(rawHeaders)) {
       headers.set(key, value);
     }
