@@ -42,6 +42,14 @@ npx wrangler d1 execute quiz-kanji --local --file ./sql/list.sql
 
 更多命令: https://developers.cloudflare.com/workers/wrangler/commands/#d1-execute
 
+### Or execute SQL directly
+
+```bash
+npx wrangler d1 execute quiz-kanji --local --json --command "SELECT * FROM quiz_prompt"
+
+npx wrangler d1 execute quiz-kanji --local --json --command "UPDATE quiz_prompt SET system = 'new value' WHERE name = 'your_name'"
+```
+
 ## 如何添加表/修改表
 
 1. 在`prisma/schema.prisma`文件中添加或修改表

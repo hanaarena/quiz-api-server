@@ -28,7 +28,7 @@ export async function getGemini(
 
   const genAI = new GoogleGenAI({ apiKey });
   const result = await genAI.models.generateContent({
-    model: model || GeminiModelList.Gemini25Flash0520,
+    model: model || GeminiModelList.Gemini3FlashPreview,
     contents: [
       {
         role: "user",
@@ -46,7 +46,10 @@ export async function getGemini(
       }
     }
   });
-  const response = result.text;
+  const response = result.candidates?.[0]?.content?.parts
+    ?.filter((part) => "text" in part)
+    .map((part) => part.text)
+    .join("") ?? "";
   return response;
 }
 

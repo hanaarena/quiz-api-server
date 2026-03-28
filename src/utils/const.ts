@@ -4,7 +4,8 @@ export const GeminiModelList = {
   Gemini2FlashThinkExp: "gemini-2.0-flash-thinking-exp",
   Gemini2ProExp: "gemini-2.0-pro-exp",
   Gemini25ProExp: "gemini-2.5-pro-exp-03-25",
-  Gemini25Flash0520: "gemini-2.5-flash"
+  Gemini25Flash0520: "gemini-2.5-flash",
+  Gemini3FlashPreview: "gemini-3.1-flash-lite-preview"
 }
 
 export const QuizType: Record<string, {name: string, value: Record<string, string>}> = {
