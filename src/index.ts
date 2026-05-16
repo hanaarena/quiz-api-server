@@ -9,7 +9,7 @@ import userRoute from "./user";
 import optRoute from "./opt";
 import quizRoute from "./quiz";
 import { modifyBodyMiddleware } from "./middlewares/res";
-import { getMoji3 } from "./cron";
+// import { getMoji3 } from "./cron";
 import proxyRoute from "./proxy";
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -48,6 +48,6 @@ app.onError((error, c) => {
 export default {
   fetch: app.fetch,
   async scheduled(_: ScheduledEvent, env: Bindings, __: ExecutionContext) {
-    await getMoji3(env);
+    // await getMoji3(env);
   }
 };
